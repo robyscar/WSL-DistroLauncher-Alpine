@@ -9,8 +9,8 @@
 
 namespace Helpers
 {
-    std::wstring GetUserInput(DWORD promptMsg, DWORD maxCharacters);
-    void PrintErrorMessage(HRESULT hr);
-    HRESULT PrintMessage(DWORD messageId, ...);
-    void PromptForInput();
+	std::wstring GetUserInput(DWORD promptMsg, DWORD maxCharacters);
+	void PrintErrorMessage(HRESULT hr);
+	HRESULT PrintMessage(DWORD messageId, ...);
+	void PromptForInput();
 }
