@@ -150,7 +150,6 @@
     <AppxManifest Include="MyDistro.appxmanifest" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DistroLauncher-Appx_TemporaryKey.pfx" />
-    <None Include="..\install.tar.gz" />
+    <CustomBuild Include="$(targetname)" />
   </ItemGroup>
 </Project>

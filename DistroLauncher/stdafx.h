@@ -9,8 +9,16 @@
 
 #pragma once
 
-#include "targetver.h"
+#ifndef STDAFX_HEADER
+#define STDAFX_HEADER
 
+#include "targetver.h"
+#include <iostream>
+#include <windows.h>
+#include <tchar.h>
+#include <iomanip>
+#include <urlmon.h>
+#include <wininet.h>
 #include <stdio.h>
 #include <tchar.h>
 #include <Windows.h>
@@ -28,6 +36,16 @@
 #include "WslApiLoader.h"
 #include "Helpers.h"
 #include "DistributionInfo.h"
+#include "DistroLauncher.h"
+#include "DistroSpecial.h"
+#include "DownloadUserland.h"
+#ifdef _UNICODE
+#define tcout wcout
+#else
+#define tcout cout
+#endif
 
 // Message strings compiled from .MC file.
 #include "messages.h"
+
+#endif

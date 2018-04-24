@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|ARM64">
@@ -139,6 +139,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DistributionInfo.h" />
+    <ClInclude Include="DistroLauncher.h" />
+    <ClInclude Include="DistroSpecial.h" />
+    <ClInclude Include="DownloadUserland.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -147,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DistributionInfo.cpp" />
+    <ClCompile Include="DownloadUserland.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="DistroLauncher.cpp" />
     <ClCompile Include="stdafx.cpp">

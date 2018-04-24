@@ -75,8 +75,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <PackageCertificateKeyFile>DistroLauncher-Appx_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <PackageCertificateThumbprint>4353BD84850DC267604312F52E8B5E87A8F8CC4A</PackageCertificateThumbprint>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
@@ -88,10 +88,6 @@
     <AppxManifest Include="MyDistro.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="DistroLauncher-Appx_TemporaryKey.pfx" />
-    <None Include="..\install.tar.gz">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\LargeTile.scale-100.png" />
