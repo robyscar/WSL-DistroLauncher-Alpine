@@ -6,7 +6,7 @@
 // Adapted from:
 // Creating a progress bar in C/C++ (or any other console app.)
 // http://www.rosshemsley.co.uk/2011/02/creating-a-progress-bar-in-c-or-any-other-console-app/
-void LoadBar(unsigned curr_val, unsigned max_val, unsigned bar_width)
+void LoadBar(unsigned curr_val, unsigned max_val, unsigned bar_width = 20)
 {
 	if ((curr_val != max_val) && (curr_val % (max_val / 100) != 0))
 		return;
@@ -139,7 +139,7 @@ HRESULT DownloadUserland() {
 	// invalidate cache, so file is always downloaded from web site
 	// (if not called, the file will be retieved from the cache if
 	// it's already been downloaded.)
-	DeleteUrlCacheEntry(url);
+	//FIXME: DeleteUrlCacheEntry(url);
 
 	CallbackHandler callbackHandler;
 	IBindStatusCallback* pBindStatusCallback = NULL;
