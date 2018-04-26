@@ -15,14 +15,18 @@
 #include "targetver.h"
 #include <iostream>
 #include <windows.h>
+#include <Windows.h>
+#include <Wincrypt.h>
 #include <tchar.h>
+#include <string>
 #include <iomanip>
 #include <urlmon.h>
 #include <wininet.h>
 #include <stdio.h>
 #include <tchar.h>
-#include <Windows.h>
 #include <stdio.h>
+#include <direct.h>
+#include <stdlib.h>
 #include <conio.h>
 #include <io.h>
 #include <string>
@@ -39,6 +43,7 @@
 #include "DistroLauncher.h"
 #include "DistroSpecial.h"
 #include "DownloadUserland.h"
+#include "ChecksumVerify.h"
 #ifdef _UNICODE
 #define tcout wcout
 #else

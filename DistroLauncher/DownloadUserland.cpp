@@ -2,7 +2,6 @@
 
 #pragma comment(lib, "urlmon.lib")
 
-
 // Adapted from:
 // Creating a progress bar in C/C++ (or any other console app.)
 // http://www.rosshemsley.co.uk/2011/02/creating-a-progress-bar-in-c-or-any-other-console-app/
@@ -133,8 +132,27 @@ HRESULT DownloadUserland() {
 	const TCHAR* url = DistroSpecial::UserlandDownloadURL;
 	const TCHAR filePath[] = _T("install.tar.gz");
 
-	std::tcout << _T("Downloading   : ") << url << std::endl;
-	std::tcout << _T("To local file : ") << filePath << std::endl;
+	std::tcout << "Downloading   : " << url << std::endl;
+	std::tcout << "To local file : " << filePath << std::endl;
+
+	char* buffer;
+	// Get the current working directory:
+	// Passing NULL as the buffer forces getcwd to allocate  
+	// memory for the path, which allows the code to support file paths  
+	// longer than _MAX_PATH, which are supported by NTFS.
+	if ((buffer = _getcwd(NULL, 0)) == NULL) {
+		perror("_getcwd error");
+	} else {
+		std::tcout << "The current working directory is: " << buffer << std::endl;
+		free(buffer);
+	}
+
+	if (remove("install.tar.gz") != 0) {
+		perror("Error deleting file");
+	}
+	else {
+		puts("File successfully deleted");
+	}
 
 	// invalidate cache, so file is always downloaded from web site
 	// (if not called, the file will be retieved from the cache if

@@ -7,7 +7,7 @@
 
 // Helper class for calling WSL Functions:
 // https://msdn.microsoft.com/en-us/library/windows/desktop/mt826874(v=vs.85).aspx
-WslApiLoader g_wslApi(DistributionInfo::Name);
+WslApiLoader g_wslApi(DistroSpecial::Name);
 
 
 HRESULT InstallDistribution(bool createUser)
@@ -16,6 +16,7 @@ HRESULT InstallDistribution(bool createUser)
 	Helpers::PrintMessage(MSG_STATUS_INSTALLING);
 	HRESULT hr = g_wslApi.WslRegisterDistribution();
 	if (FAILED(hr)) {
+		std::wcout << "WslRegisterDistribution failed" << std::endl;
 		return hr;
 	}
 
@@ -26,18 +27,31 @@ HRESULT InstallDistribution(bool createUser)
 		return hr;
 	}
 
+	// Pre create user actions, used to fix issues (if any) and/or install dependencies before a user account is created.
+	// Like wrong permissions on /
+	for (const std::wstring &commandLine : DistroSpecial::commandLinePreAddUser) {
+		if (!commandLine.empty()) {
+			std::wcout << "Executing bugfixing command: " << commandLine << std::endl;
+			hr = g_wslApi.WslLaunchInteractive(commandLine.c_str(), true, &exitCode);
+			if ((FAILED(hr)) || (exitCode != 0)) {
+				std::wcerr << "Bugfixing command failed" << std::endl;
+				return hr;
+			}
+		}
+	}
+
 	// Create a user account.
 	if (createUser) {
 		Helpers::PrintMessage(MSG_CREATE_USER_PROMPT);
 		std::wstring userName;
 		do {
 			userName = Helpers::GetUserInput(MSG_ENTER_USERNAME, 32);
-
 		} while (!DistributionInfo::CreateUser(userName));
 
 		// Set this user account as the default.
 		hr = SetDefaultUser(userName);
 		if (FAILED(hr)) {
+			std::wcerr << "SetDefaultUser failed." << std::endl;
 			return hr;
 		}
 	}
@@ -51,6 +65,7 @@ HRESULT SetDefaultUser(std::wstring_view userName)
 	// to use this UID as the default.
 	ULONG uid = DistributionInfo::QueryUid(userName);
 	if (uid == UID_INVALID) {
+		std::wcerr << "UID is invalid or query command failed." << std::endl;
 		return E_INVALIDARG;
 	}
 
@@ -65,7 +80,7 @@ HRESULT SetDefaultUser(std::wstring_view userName)
 int wmain(int argc, wchar_t const *argv[])
 {
 	// Update the title bar of the console window.
-	SetConsoleTitleW(DistributionInfo::WindowTitle.c_str());
+	SetConsoleTitleW(DistroSpecial::WindowTitle.c_str());
 
 	// Initialize a vector of arguments.
 	std::vector<std::wstring_view> arguments;
@@ -88,8 +103,11 @@ int wmain(int argc, wchar_t const *argv[])
 	bool installOnly = ((arguments.size() > 0) && (arguments[0] == ARG_INSTALL));
 	HRESULT hr = S_OK;
 	if (!g_wslApi.WslIsDistributionRegistered()) {
-		//TODO: DownloadUserland();
-		//TODO: Check SHA256 sum
+		do {
+			//Download specified tar.gz;
+			DownloadUserland();
+			//Verify if download completed successfully with SHA256
+		} while (!ChecksumVerify::Verify(L"install.tar.gz", DistroSpecial::UserlandChecksum));
 
 		// If the "--root" option is specified, do not create a user account.
 		bool useRoot = ((installOnly) && (arguments.size() > 1) && (arguments[1] == ARG_INSTALL_ROOT));

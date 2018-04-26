@@ -7,12 +7,16 @@
 
 bool DistributionInfo::CreateUser(std::wstring_view userName)
 {
-	// Create the user account.
 	DWORD exitCode;
-	std::wstring commandLine = DistroSpecial::commandLineAddUser;
+	std::wstring commandLine;
+	HRESULT hr;
+
+	// Create the user account.
+	commandLine = DistroSpecial::commandLineAddUser;
 	commandLine += userName;
-	HRESULT hr = g_wslApi.WslLaunchInteractive(commandLine.c_str(), true, &exitCode);
+	hr = g_wslApi.WslLaunchInteractive(commandLine.c_str(), true, &exitCode);
 	if ((FAILED(hr)) || (exitCode != 0)) {
+		std::wcerr << "Adding user to groups failed. Performing cleanup for retry." << std::endl;
 		return false;
 	}
 
@@ -21,11 +25,15 @@ bool DistributionInfo::CreateUser(std::wstring_view userName)
 	commandLine += userName;
 	hr = g_wslApi.WslLaunchInteractive(commandLine.c_str(), true, &exitCode);
 	if ((FAILED(hr)) || (exitCode != 0)) {
+		std::wcerr << "Adding user to groups failed. Performing cleanup for retry." << std::endl;
 
 		// Delete the user if the group add command failed.
 		commandLine = DistroSpecial::commandLineDeleteUSer;
 		commandLine += userName;
-		g_wslApi.WslLaunchInteractive(commandLine.c_str(), true, &exitCode);
+		hr = g_wslApi.WslLaunchInteractive(commandLine.c_str(), true, &exitCode);
+		if ((FAILED(hr)) || (exitCode != 0)) {
+			std::wcerr << "Deleting useraccount failed." << std::endl;
+		}
 		return false;
 	}
 
