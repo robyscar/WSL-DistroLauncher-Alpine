@@ -82,4 +82,9 @@
   <ItemGroup>
     <CustomBuild Include="messages.mc" />
   </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="application.manifest">
+      <Filter>Resource Files</Filter>
+    </Manifest>
+  </ItemGroup>
 </Project>

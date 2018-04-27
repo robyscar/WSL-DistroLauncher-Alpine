@@ -175,6 +175,12 @@
       <Outputs>%(Filename).rc;%(Filename).h;MSG0409.bin</Outputs>
     </CustomBuild>
   </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="application.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DistroLauncher.rc" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

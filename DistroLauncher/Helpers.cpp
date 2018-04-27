@@ -5,9 +5,28 @@
 
 #include "stdafx.h"
 
+
 namespace {
 	HRESULT FormatMessageHelperVa(DWORD messageId, va_list vaList, std::wstring* message);
 	HRESULT PrintMessageVa(DWORD messageId, va_list vaList);
+}
+
+std::wstring Helpers::CreateTemporaryDirectory() {
+	std::wstring strTempPath = L"";
+	wchar_t wchPath[MAX_PATH];
+	if (GetTempPathW(MAX_PATH, wchPath))
+		strTempPath = wchPath;
+
+	fs::path dir(strTempPath);
+	fs::path dir2(L"wsl_" + DistroSpecial::Name + L"_setup");
+	fs::path full_path = dir / dir2;
+	CreateDirectoryW(full_path.c_str(), NULL); // TODO: Check return status
+	std::wcout << L"Temporary directory: " << full_path << std::endl;
+	return full_path;
+}
+
+void Helpers::SetWorkingDirectory(std::wstring newPath) {
+	SetCurrentDirectoryW(newPath.c_str());
 }
 
 std::wstring Helpers::GetUserInput(DWORD promptMsg, DWORD maxCharacters)

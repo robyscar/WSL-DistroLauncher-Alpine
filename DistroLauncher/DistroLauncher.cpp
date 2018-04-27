@@ -10,11 +10,11 @@
 WslApiLoader g_wslApi(DistroSpecial::Name);
 
 
-HRESULT InstallDistribution(bool createUser)
+HRESULT InstallDistribution(bool createUser, PCWSTR tarGzFilename)
 {
 	// Register the distribution.
 	Helpers::PrintMessage(MSG_STATUS_INSTALLING);
-	HRESULT hr = g_wslApi.WslRegisterDistribution();
+	HRESULT hr = g_wslApi.WslRegisterDistribution(tarGzFilename);
 	if (FAILED(hr)) {
 		std::wcout << "WslRegisterDistribution failed" << std::endl;
 		return hr;
@@ -82,6 +82,12 @@ int wmain(int argc, wchar_t const *argv[])
 	// Update the title bar of the console window.
 	SetConsoleTitleW(DistroSpecial::WindowTitle.c_str());
 
+	// Switch workingdirectory to temporary folder
+	const std::wstring tempWorkingDir = Helpers::CreateTemporaryDirectory();
+	Helpers::SetWorkingDirectory(tempWorkingDir);
+	fs::path file(L"install.tar.gz");
+	fs::path full_path = tempWorkingDir / file;
+
 	// Initialize a vector of arguments.
 	std::vector<std::wstring_view> arguments;
 	for (int index = 1; index < argc; index += 1) {
@@ -104,14 +110,13 @@ int wmain(int argc, wchar_t const *argv[])
 	HRESULT hr = S_OK;
 	if (!g_wslApi.WslIsDistributionRegistered()) {
 		do {
-			//Download specified tar.gz;
 			DownloadUserland();
 			//Verify if download completed successfully with SHA256
-		} while (!ChecksumVerify::Verify(L"install.tar.gz", DistroSpecial::UserlandChecksum));
+		} while (!ChecksumVerify::Verify(full_path.c_str(), DistroSpecial::UserlandChecksum));
 
 		// If the "--root" option is specified, do not create a user account.
 		bool useRoot = ((installOnly) && (arguments.size() > 1) && (arguments[1] == ARG_INSTALL_ROOT));
-		hr = InstallDistribution(!useRoot);
+		hr = InstallDistribution(!useRoot, full_path.c_str());
 		if (FAILED(hr)) {
 			if (hr == HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS)) {
 				Helpers::PrintMessage(MSG_INSTALL_ALREADY_EXISTS);

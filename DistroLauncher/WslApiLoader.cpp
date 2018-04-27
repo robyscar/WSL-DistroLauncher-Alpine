@@ -41,9 +41,9 @@ BOOL WslApiLoader::WslIsDistributionRegistered()
 	return _isDistributionRegistered(_distributionName.c_str());
 }
 
-HRESULT WslApiLoader::WslRegisterDistribution()
+HRESULT WslApiLoader::WslRegisterDistribution(PCWSTR tarGzFilename)
 {
-	HRESULT hr = _registerDistribution(_distributionName.c_str(), L"install.tar.gz");
+	HRESULT hr = _registerDistribution(_distributionName.c_str(), tarGzFilename);
 	if (FAILED(hr)) {
 		Helpers::PrintMessage(MSG_WSL_REGISTER_DISTRIBUTION_FAILED, hr);
 	}

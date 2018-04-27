@@ -28,7 +28,7 @@ public:
 
 	BOOL WslIsDistributionRegistered();
 
-	HRESULT WslRegisterDistribution();
+	HRESULT WslRegisterDistribution(PCWSTR tarGzFilename = L"install.tar.gz");
 
 	HRESULT WslConfigureDistribution(ULONG defaultUID,
 		WSL_DISTRIBUTION_FLAGS wslDistributionFlags);

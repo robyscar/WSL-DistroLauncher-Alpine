@@ -16,7 +16,7 @@ namespace DistroSpecial
 	// Command Lines
 	const std::wstring commandLinePreAddUser[] = {
 		L"/bin/chmod 755 /",  // Alpine tar.gz image has wrong permissions on the "/" aka. root folder, this prevents su from working, so only "install --root" is working.
-		L"/sbin/apk --no-cache add shadow sudo"  // Provides /usr/sbin/usermod
+		L"/sbin/apk --no-cache add shadow"  // Provides /usr/sbin/usermod
 	}; 
 	const std::wstring commandLineAddUser = L"/usr/sbin/adduser -g '' -D ";
 	// const std::wstring commandLineAddUserToGroups = L"/usr/sbin/usermod -aG adm,cdrom,sudo,dip,plugdev ";

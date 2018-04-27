@@ -8,5 +8,5 @@
 #define ARG_RUN                 L"run"
 #define ARG_RUN_C               L"-c"
 
-static HRESULT InstallDistribution(bool createUser);
+static HRESULT InstallDistribution(bool createUser, PCWSTR tarGzFilename);
 static HRESULT SetDefaultUser(std::wstring_view userName);

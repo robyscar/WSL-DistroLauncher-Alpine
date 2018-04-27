@@ -13,4 +13,6 @@ namespace Helpers
 	void PrintErrorMessage(HRESULT hr);
 	HRESULT PrintMessage(DWORD messageId, ...);
 	void PromptForInput();
+	std::wstring CreateTemporaryDirectory();
+	void SetWorkingDirectory(std::wstring newPath);
 }

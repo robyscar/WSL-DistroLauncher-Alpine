@@ -14,6 +14,7 @@
 
 #include "targetver.h"
 #include <iostream>
+#include <filesystem>
 #include <windows.h>
 #include <Windows.h>
 #include <Wincrypt.h>
@@ -52,5 +53,7 @@
 
 // Message strings compiled from .MC file.
 #include "messages.h"
+
+namespace fs = std::experimental::filesystem;
 
 #endif
