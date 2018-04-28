@@ -1,87 +1,55 @@
-# WSL DistroLauncher Sample 
+# WSL Alpine DistroLauncher
 ## Introduction 
-  This is the reference implementation for a Windows Subsystem for Linux (WSL) distribution installer application. You can use this sample project to create your own Linux distribution application that can be submitted to the Microsoft Store or sideloaded on your dev machine. 
+  This is the Alpine Launcher implementation for a Windows Subsystem for Linux (WSL) distribution.
   
   Note: This project is written in C++.
 
   ### Goals
   The goal of this project is to enable:
-  * Linux distribution owners to package and submit an application that runs on top of WSL to the Microsoft Store
-  * Developers to create custom Linux distributions that can be sideloaded onto their dev machine
+  * Allow devolopers to use Alpine on there Windows machines for simple tasks (basically everything except kernel modules)
+  * Allow developers to use the WSL with a very low foodprint (compared to debian/ubuntu)
+  * Use the official tar.gz Userland release without building a custom userland tar.gz
+  * Make the project "self maintained", aka. don't require to ship any dependencies that require beeing updated and automatically pull the latest stable userland from the official source (WIP)
 
 ### Project Status
-This project is an active repo maintained by the WSL engineering team at Microsoft.
+This project is an active repo maintained by agowa338.
 
 ### Contents
   The sample provides the following functionality:
-  (where `launcher.exe` is replaced by the distro-specific name)
 
-  * `launcher.exe`
+  * `Alpine.exe`
     - Launches the user's default shell in the user's home directory.
 
-  * `launcher.exe install [--root]`
+  * `Alpine.exe install [--root]`
     - Install the distribution and do not launch the shell when complete.
       - `--root`: Do not create a user account and leave the default user set to root.
 
-  * `launcher.exe run <command line>`
+  * `Alpine.exe run <command line>`
     - Run the provided command line in the current working directory. If no command line is provided, the default shell is launched.
     - Everything after `run` is passed to WslLaunchInteractive.
 
-  * `launcher.exe config [setting [value]]`
+  * `Alpine.exe config [setting [value]]`
     - Configure settings for this distribution.
     - Settings:
       - `--default-user <username>`: Sets the default user to <username>. This must be an existing user.
 
-  * `launcher.exe help`
+  * `Alpine.exe help`
     - Print usage information.
 
-## Launcher Outline
-  This is the basic flow of how the launcher code is set up.
-
-  1.  First, check if the distribution is registered. If it's not, then it is registered it with the Windows Subsystem for Linux. Registration extracts the tar.gz file that is included in your distribution appx.
-  2.  Once the distro is successfully registered, any other pre-launch setup is performed in `InstallDistribution()`. This is where distro-specific setup can be performed. As an example, the reference implementation creates a user account and sets this user account as the default for the distro.
-      - Note: The commands used to query and create user accounts are Ubuntu-specific; change as necessary to match the needs of your distro.
-  3.  Once the distro is configured, parse any other command-line arguments. The details of these arguments are described above, in the [Introduction](#Introduction).
-
-## Project Structure
-  The distro launcher is comprised of two Visual Studio projects - `launcher` and `DistroLauncher-Appx`. The `launcher` project builds the actual executable that is run when a user launches the app. The `DistroLauncher-Appx` builds the appx with all the correctly scaled resources and other dependencies for the Windows Store. Code changes will happen in the `launcher` project (under `DistroLauncher/`). Any manifest changes are going to happen in the `DistroLauncher-Appx` project (under `DistroLauncher-Appx/`). 
-
-## Getting Started
-  1. Generate a test certificate. Open `DistroLauncher-Appx/MyDistro.appxmanifest`, select the Packaging tab, select Choose Certificate, click the Configure Certificate drop down and select Create test certificate.
-  2. Edit your distribution-specific information in `DistributionInfo.h` and `DistributionInfo.cpp`. **NOTE: The `DistributionInfo::Name` variable must uniquely identify your distribution and cannot change from one version of your app to the next.**
-      - The examples for creating a user account and querying the UID are from an Ubuntu-based system. They may need to be modified to work appropriately on your distribution.
-  3.  Add an icon (.ico) and logo (.png) to the `/images` directory. The logo will be used in the Start Menu and the taskbar for your launcher, and the icon will appear on the console window.
-      - The icon must be named `icon.ico`.
-  4. Pick the name you'd like to make this distro callable from the command line. For the rest of the README, I'll be using `mydistro` or `mydistro.exe`. **This is the name of your executable** and should be unique.
-  5. Make sure to change the name of the project in the `DistroLauncher-Appx/DistroLauncher-Appx.vcxproj` file to the name of your executable we picked in step 4. By default, the lines should look like:
-
-  ``` xml
-  <PropertyGroup Label="Globals">
-    ...
-    <ProjectName>mydistro</ProjectName>
-  </PropertyGroup>
-  ```
-
-  So, if I wanted to instead call my distro "TheBestDistroEver", I'd change this to:
-  ``` xml
-  <PropertyGroup Label="Globals">
-    ...
-    <ProjectName>TheBestDistroEver</ProjectName>
-  </PropertyGroup>
-  ```
-
-  **DO NOT** change the ProjectName of the `DistroLauncher/DistroLauncher.vcxproj` from the value `launcher`. Doing so will break the build, as the DistroLauncher-Appx project is looking for the output of this project as `launcher.exe`.
-
-  6.  Update `MyDistro.appxmanifest`. There are several properties that are in the manifest that will need to be updated with your specific values.
+## Getting Started (Project Participants)
+  0. Clone this repository and open it with Visual Studio ( >= 2017 )
+  1. Generate a test certificate.
+  2. Import it to your Cert:\CurrentUser\My and Cert:\LocalMachine\TrustedPublisher as well as Cert:\LocalMachine\Root. If you have a dedecated testing VM, import the certificate only to Cert:\CurrentUser\My on your production system, or you may make yourself vulnerable to all kinds of attacks. Thats the reason why you would want to protect this certificate as nearly good as a bought code signing certificate.
+  3. Open `DistroLauncher-Appx/MyDistro.appxmanifest`, select the Packaging tab, select Choose Certificate, click the Configure Certificate drop down and select Create test certificate.
+  4. Edit your distribution-specific information in `DistroSpecial.h`. **NOTE: The `DistroSpecial::Name` variable must uniquely identify your distribution and cannot change from one version of your app to the next. Or it will register as another distribution within WSL, so if you want to havbe one distro twicke, you would change this name.**
+  5.  Update `Alpine.appxmanifest`. There are several properties that are in the manifest that will need to be updated with your specific values.
       - Make sure to note the `Identity Publisher` value (by default, `"CN=DistroOwner"`). We'll need that for testing the application.
-      - Make sure that `<desktop:ExecutionAlias Alias="mydistro.exe" />` is set to something that ends in ".exe". This is the command that will be used to launch your distro from the command line and should match the executable name we picked in step 4.
-      - Make sure each of the `Executable` values matches the executable name we picked in step 4.
-  7. Copy your tar.gz containing your distro into the root of the project and rename it to `install.tar.gz`.
+      - Make sure that `<desktop:ExecutionAlias Alias="mydistro.exe" />` is set to something that ends in ".exe". This is the command that will be used to launch your distro from the command line.
 
 ## Build and Test
-  To help building and testing the DistroLauncher project, we've included the following scripts to automate some tasks. You can either choose to use these scripts from the command line, or work directly in Visual Studio, whatever your preference is. 
+  To help building and testing the Alpine Launcher project, there are the following scripts to automate some tasks. You can either choose to use these scripts from the command line, or work directly in Visual Studio, whatever your preference is. 
 
-  **Please Note** some sideloading/deployment steps don't work if you mix and match Visual Studio and the command line for development. If you run into errors while trying to deploy your app after already deploying it once, the easiest step is usually just to uninstall the previously sideloaded version and try again. 
+  **Please Note** some sideloading/deployment steps don't work if you mix and match Visual Studio and the command line for development. If you run into errors while trying to deploy your app after already deploying it once, the easiest step is usually just to uninstall the previously sideloaded version and try again. By rightclicking the App and selecting "Uninstall", if wsl is still installed, but the app is not, just run `wslconfig.exe /u Alpine`.
 
 ### Setting up your Windows Environment
 You will need a Windows environment to test that your app installs and works as expected. To set up a Windows environment for testing you can follow the steps from the [Windows Dev Center](https://developer.microsoft.com/en-us/windows/downloads/virtual-machines).
@@ -89,16 +57,16 @@ You will need a Windows environment to test that your app installs and works as 
 Note: If you are using Hyper-V you can use the new VM gallery to easily spin up a Windows instance.
 
 ### Building Project (Command line):
-  To compile the project, you can simply type `build` in the root of the project to use MSBuild to build the solution. This is useful for verifying that your application compiles. It will also build an appx for you to sideload on your dev machine for testing.
+  To compile the project, you can simply type `.\build.bat` in the root of the project to use MSBuild to build the solution. This is useful for verifying that your application compiles. It will also build an appx for you to sideload on your dev machine for testing.
   
   `build.bat` assumes that MSBuild is installed at one of the following paths:
   `%ProgramFiles*%\MSBuild\14.0\bin\msbuild.exe` or
   `%ProgramFiles*%\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\msbuild.exe` or
   `%ProgramFiles*%\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\msbuild.exe`.
 
-  If that's not the case, then you will need to modify that script.
+  If that's not the case, then you will need to modify that script. 
 
-  Once you've completed the build, the packaged appx should be placed in a directory like `WSL-DistroLauncher\x64\Release\DistroLauncher-Appx` and should be named something like `DistroLauncher-Appx_1.0.0.0_x64.appx`. Simply double click that appx file to open the sideloading dialog. 
+  Once you've completed the build, the packaged appx should be placed in the directory `Alpine-DistroLauncher\x64\Debug\DistroLauncher-Appx` and should be named something like `DistroLauncher-Appx_1.0.0.0_x64_Debug.appx`. Simply double click that appx file to open the sideloading dialog. 
 
   You can also use the PowerShell cmdlet `Add-AppxPackage` to register your appx:
   ``` powershell
@@ -109,14 +77,14 @@ Note: If you are using Hyper-V you can use the new VM gallery to easily spin up 
 
   You can also easily build and deploy the distro launcher from Visual Studio. To sideload your appx on your machine for testing, all you need to do is right-click on the "Solution (DistroLauncher)" in the Solution Explorer and click "Deploy Solution". This should build the project and sideload it automatically for testing.
 
-  In order run your solution under the Visual Studio debugger, you will need to copy your install.tar.gz file into your output folder, for example: `x64\Debug`. **NOTE: If you have registered your distribution by this method, you will need to manually unregister it via wslconfig.exe /unregister**
+  **NOTE: In order run your solution under the Visual Studio debugger, you will need to manually unregister it via `wslconfig.exe /u Alpine`.**
 
 ### Testing
-  You should now have a finished appx sideloaded on your machine for testing.
+  You should now have a finished appx sideloaded on your machine for testing. 
 
   But before you do that, make sure you've enabled Developer Mode in the Settings app (sideloading won't work without it). Then double click on the signed appx and click "Install" to install it. Note that this only installed the appx on your system, but it doesn't unzip the tar.gz or register the distro yet. 
 
-  You can then begin the distro registration by launching the app from the Start Menu or executing `mydistro` from the command line. 
+  You can then begin the distro registration by launching the app from the Start Menu or executing `Alpine` from the command line. Or just select "Start after installation" while installing. 
 
 ### Publishing
   Once you are ready to upload your appx to the store, you will need to change a few small things to prepare the appx for the store.  
@@ -132,14 +100,13 @@ Note: If you are using Hyper-V you can use the new VM gallery to easily spin up 
 
   **NOTE**: Visual Studio can update this for you. You can do that by right-clicking on "DistroLauncher-Appx (Universal Windows)" in the solution explorer and clicking on "Store... Associate App with the Store..." and following the wizard. 
 
-  2. You will either need to run `build rel` from the command line to generate the Release version of your appx or use Visual Studio directly to upload your package to the store. You can do this by right-clicking on "DistroLauncher-Appx (Universal Windows)" in the solution explorer and clicking on "Store... Create App Packages..." and following the wizard. 
+  2. You will either need to run `.\build.bat rel` from the command line to generate the Release version of your appx or use Visual Studio directly to upload your package to the store. You can do this by right-clicking on "DistroLauncher-Appx (Universal Windows)" in the solution explorer and clicking on "Store... Create App Packages..." and following the wizard. 
 
   Also, make sure to check out the [Notes for uploading to the Store](https://github.com/Microsoft/WSL-DistroLauncher/wiki/Notes-for-uploading-to-the-Store) page on our wiki for more information.
 
 # Issues & Contact
-Any bugs or problems discovered with the Launcher should be filed in this project's Issues list. The team will be notified and will respond to the reported issue within 3 (US) working days.
-
-You may also reach out to our team alias at wslpartners@microsoft.com for questions related to submitting your app to the Microsoft Store.
+Any bugs or problems discovered with the Launcher should be filed in this project's Issues list. 
 
 # Contributing
+## Base Project
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
