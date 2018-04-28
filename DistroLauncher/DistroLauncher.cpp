@@ -82,12 +82,6 @@ int wmain(int argc, wchar_t const *argv[])
 	// Update the title bar of the console window.
 	SetConsoleTitleW(DistroSpecial::WindowTitle.c_str());
 
-	// Switch workingdirectory to temporary folder
-	const std::wstring tempWorkingDir = Helpers::CreateTemporaryDirectory();
-	Helpers::SetWorkingDirectory(tempWorkingDir);
-	fs::path file(L"install.tar.gz");
-	fs::path full_path = tempWorkingDir / file;
-
 	// Initialize a vector of arguments.
 	std::vector<std::wstring_view> arguments;
 	for (int index = 1; index < argc; index += 1) {
@@ -109,6 +103,12 @@ int wmain(int argc, wchar_t const *argv[])
 	bool installOnly = ((arguments.size() > 0) && (arguments[0] == ARG_INSTALL));
 	HRESULT hr = S_OK;
 	if (!g_wslApi.WslIsDistributionRegistered()) {
+		// Switch workingdirectory to temporary folder
+		const std::wstring tempWorkingDir = Helpers::CreateTemporaryDirectory();
+		Helpers::SetWorkingDirectory(tempWorkingDir);
+		fs::path file(L"install.tar.gz");
+		fs::path full_path = tempWorkingDir / file;
+
 		do {
 			DownloadUserland();
 			//Verify if download completed successfully with SHA256

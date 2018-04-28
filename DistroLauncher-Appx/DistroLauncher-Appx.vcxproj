@@ -76,7 +76,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
-    <PackageCertificateThumbprint>4353BD84850DC267604312F52E8B5E87A8F8CC4A</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>E905488EBB67684B4F15144A948170B406285641</PackageCertificateThumbprint>
+    <PackageCertificateKeyFile>DistroLauncher-Appx_StoreKey.pfx</PackageCertificateKeyFile>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
@@ -151,5 +152,9 @@
       <Command>copy $(SolutionDir)\$(platform)\$(Configuration)\launcher.exe $(SolutionDir)\$(platform)\$(Configuration)\$(ProjectName)\$(targetname).exe</Command>
       <Outputs>$(targetname).exe</Outputs>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DistroLauncher-Appx_StoreKey.pfx" />
+    <None Include="Package.xml" />
   </ItemGroup>
 </Project>
