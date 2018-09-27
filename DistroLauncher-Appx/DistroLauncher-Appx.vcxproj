@@ -77,7 +77,11 @@
   <PropertyGroup>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <PackageCertificateThumbprint>E905488EBB67684B4F15144A948170B406285641</PackageCertificateThumbprint>
-    <PackageCertificateKeyFile>DistroLauncher-Appx_StoreKey.pfx</PackageCertificateKeyFile>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x64</AppxBundlePlatforms>
+    <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+    <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
+    <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
@@ -155,6 +159,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="DistroLauncher-Appx_StoreKey.pfx" />
+    <None Include="DistroLauncher-Appx_TemporaryKey.pfx" />
     <None Include="Package.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Package.StoreAssociation.xml" />
   </ItemGroup>
 </Project>

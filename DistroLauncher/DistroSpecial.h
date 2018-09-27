@@ -16,7 +16,8 @@ namespace DistroSpecial
 	// Command Lines
 	const std::wstring commandLinePreAddUser[] = {
 		L"/bin/chmod 755 /",  // Alpine tar.gz image has wrong permissions on the "/" aka. root folder, this prevents su from working, so only "install --root" is working.
-		L"/sbin/apk --no-cache add shadow"  // Provides /usr/sbin/usermod
+		L"/sbin/apk --no-cache add shadow",  // Provides /usr/sbin/usermod
+		L"/bin/sed -i 's/^export PATH/#export PATH/' /etc/profile" // Remove the explicitly exported path variable, as wsl is preinitializing path for us, so that windows applications can also be called from within wsl.
 	}; 
 	const std::wstring commandLineAddUser = L"/usr/sbin/adduser -g '' -D ";
 	// const std::wstring commandLineAddUserToGroups = L"/usr/sbin/usermod -aG adm,cdrom,sudo,dip,plugdev ";
@@ -24,6 +25,6 @@ namespace DistroSpecial
 	const std::wstring commandLineDeleteUSer = L"/usr/sbin/deluser --remove-home ";
 	const std::wstring commandLineQueryUID = L"/usr/bin/id -u ";
 	const PCWSTR commandLineDeleteResolvConf = L"/bin/rm /etc/resolv.conf";
-	const TCHAR UserlandDownloadURL[] = _T("http://dl-cdn.alpinelinux.org/alpine/v3.7/releases/x86_64/alpine-minirootfs-3.7.0-x86_64.tar.gz");
-	const std::wstring UserlandChecksum = L"17e8275545aca7a6eaf4e43759a091d33bd9eb9cf11805118773dc940c8b94ac";
+	const TCHAR UserlandDownloadURL[] = _T("http://dl-cdn.alpinelinux.org/alpine/v3.8/releases/x86_64/alpine-minirootfs-3.8.1-x86_64.tar.gz");
+	const std::wstring UserlandChecksum = L"ad753d802048fa902e4d8b35cc53656de8ed0e6d082246089a11a86014b0f1a5";
 }

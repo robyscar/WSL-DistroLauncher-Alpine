@@ -34,10 +34,26 @@ HRESULT InstallDistribution(bool createUser, PCWSTR tarGzFilename)
 			std::wcout << "Executing bugfixing command: " << commandLine << std::endl;
 			hr = g_wslApi.WslLaunchInteractive(commandLine.c_str(), true, &exitCode);
 			if ((FAILED(hr)) || (exitCode != 0)) {
-				std::wcerr << "Bugfixing command failed" << std::endl;
-				return hr;
+				std::wcerr << "Bugfixing command failed." << std::endl;
+				break;
 			}
 		}
+	}
+	if ((FAILED(hr)) || (exitCode != 0)) {
+		std::wcerr << std::endl << std::endl << "==== MANUAL STEP ====" << std::endl;
+		std::wcerr << "If you're on Windows 10 1803 17134, manually execute this/these command(s), NOW:" << std::endl << "Or upgrade to the latest version of windows 10" << std::endl;
+		for (const std::wstring &commandLine : DistroSpecial::commandLinePreAddUser) {
+			if (!commandLine.empty()) {
+				std::wcerr << commandLine << std::endl;
+			}
+		}
+		std::wcerr << std::endl;
+		std::wcerr << "Also you need to provide a /bin/bash executable to use bash.exe from Windows." << std::endl;
+		std::wcerr << "Either by symlinking any other shell to /bin/bash or by installing bash." << std::endl;
+		std::wcerr << "If you want to change the default user (after you created one), run:" << std::endl;
+		std::wcerr << DistroSpecial::Name << ".exe /config --default-user <username>" << std::endl;
+		std::wcerr << "== // MANUAL STEP // ==" << std::endl;
+		return hr;
 	}
 
 	// Create a user account.
@@ -79,6 +95,9 @@ HRESULT SetDefaultUser(std::wstring_view userName)
 
 int wmain(int argc, wchar_t const *argv[])
 {
+	//while (!::IsDebuggerPresent())
+	//	::Sleep(100); // to avoid 100% CPU load
+
 	// Update the title bar of the console window.
 	SetConsoleTitleW(DistroSpecial::WindowTitle.c_str());
 
@@ -139,10 +158,10 @@ int wmain(int argc, wchar_t const *argv[])
 		else if ((arguments[0] == ARG_RUN) ||
 			(arguments[0] == ARG_RUN_C)) {
 
-			std::wstring command;
+			std::wstring command = L"";
 			for (size_t index = 1; index < arguments.size(); index += 1) {
-				command += L" ";
 				command += arguments[index];
+				command += L" ";
 			}
 
 			hr = g_wslApi.WslLaunchInteractive(command.c_str(), true, &exitCode);

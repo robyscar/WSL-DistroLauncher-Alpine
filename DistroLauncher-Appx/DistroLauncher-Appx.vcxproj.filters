@@ -147,9 +147,18 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <AppxManifest Include="MyDistro.appxmanifest" />
+    <AppxManifest Include="Alpine.appxmanifest" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="$(targetname)" />
+    <CustomBuild Include="$(targetname)" />
+    <CustomBuild Include="$(targetname)" />
+    <CustomBuild Include="$(targetname)" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DistroLauncher-Appx_StoreKey.pfx" />
+    <None Include="Package.xml" />
+    <None Include="DistroLauncher-Appx_TemporaryKey.pfx" />
+    <None Include="Package.StoreAssociation.xml" />
   </ItemGroup>
 </Project>
