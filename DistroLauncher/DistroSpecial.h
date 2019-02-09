@@ -25,6 +25,6 @@ namespace DistroSpecial
 	const std::wstring commandLineDeleteUSer = L"/usr/sbin/deluser --remove-home ";
 	const std::wstring commandLineQueryUID = L"/usr/bin/id -u ";
 	const PCWSTR commandLineDeleteResolvConf = L"/bin/rm /etc/resolv.conf";
-	const TCHAR UserlandDownloadURL[] = _T("http://dl-cdn.alpinelinux.org/alpine/v3.8/releases/x86_64/alpine-minirootfs-3.8.1-x86_64.tar.gz");
-	const std::wstring UserlandChecksum = L"ad753d802048fa902e4d8b35cc53656de8ed0e6d082246089a11a86014b0f1a5";
+	const TCHAR UserlandDownloadURL[] = _T("http://dl-cdn.alpinelinux.org/alpine/v3.9/releases/x86_64/alpine-minirootfs-3.9.0-x86_64.tar.gz");
+	const std::wstring UserlandChecksum = L"f82efed1a80c9af86c38bed10f3541c5588453b97684d767a5a3b0f3fa0e3f09";
 }
