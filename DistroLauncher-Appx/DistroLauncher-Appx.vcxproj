@@ -12,7 +12,6 @@
     <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
     <TargetName>Alpine</TargetName>
     <ProjectName>DistroLauncher-Appx</ProjectName>
-    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <ItemGroup Label="ProjectConfigurations">
@@ -75,13 +74,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
-    <PackageCertificateThumbprint>E905488EBB67684B4F15144A948170B406285641</PackageCertificateThumbprint>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <PackageCertificateThumbprint>B2E070DE0B3D05D51A5AA5620158104DE48669F6</PackageCertificateThumbprint>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x64</AppxBundlePlatforms>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
+    <PackageCertificateKeyFile>DistroLauncher-Appx_StoreKey.pfx</PackageCertificateKeyFile>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
@@ -160,9 +160,13 @@
   <ItemGroup>
     <None Include="DistroLauncher-Appx_StoreKey.pfx" />
     <None Include="DistroLauncher-Appx_TemporaryKey.pfx" />
-    <None Include="Package.xml" />
+    <None Include="Package.xml">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Package.StoreAssociation.xml" />
+    <None Include="Package.StoreAssociation.xml">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
 </Project>

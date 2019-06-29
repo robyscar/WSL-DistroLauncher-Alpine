@@ -154,6 +154,7 @@
     <CustomBuild Include="$(targetname)" />
     <CustomBuild Include="$(targetname)" />
     <CustomBuild Include="$(targetname)" />
+    <CustomBuild Include="$(targetname)" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DistroLauncher-Appx_StoreKey.pfx" />
