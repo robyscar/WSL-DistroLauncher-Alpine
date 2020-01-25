@@ -13,6 +13,7 @@
 
 ### Project Status
 This project is an active repo maintained by agowa338.
+The official windows Store download can be found here: https://www.microsoft.com/en-us/p/alpine-wsl/9p804crf0395
 
 ### Contents
   The sample provides the following functionality:
