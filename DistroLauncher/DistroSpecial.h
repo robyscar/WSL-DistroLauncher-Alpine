@@ -17,6 +17,7 @@ namespace DistroSpecial
 	const std::wstring commandLinePreAddUser[] = {
 		L"/bin/chmod 755 /",  // Alpine tar.gz image has wrong permissions on the "/" aka. root folder, this prevents su from working, so only "install --root" is working.
 		L"/sbin/apk --no-cache add shadow",  // Provides /usr/sbin/usermod
+		L"/sbin/apk --no-cache add alpine-base",  // Make sure files like /etc/alpine-release are properly updated and common tools like lbu are present
 		L"/bin/sed -i 's/^export PATH/#export PATH/' /etc/profile" // Remove the explicitly exported path variable, as wsl is preinitializing path for us, so that windows applications can also be called from within wsl.
 	}; 
 	const std::wstring commandLineAddUser = L"/usr/sbin/adduser -g '' -D ";
