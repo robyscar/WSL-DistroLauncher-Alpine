@@ -1,5 +1,7 @@
 ## https://jlelse.blog/dev/using-windows-3
 
+after setup and installation open a powershell console or a cmd console and:
+
 1) logging in with root (wsl.exe --distribution Alpine --user root),
 2) setting a root password (passwd),
 3) installing sudo (apk add sudo),
