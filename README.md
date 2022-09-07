@@ -1,12 +1,12 @@
 ## https://jlelse.blog/dev/using-windows-3
 
-logging in with root (wsl.exe --distribution Alpine --user root),
-setting a root password (passwd),
-installing sudo (apk add sudo),
-un-commenting a line in the /etc/sudoers file to allow anyone use sudo who is in the sudo group (%sudo ALL=(ALL) ALL),
-create a sudo group (addgroup sudo) and
-add my default user to that group (usermod -aG sudo <username>).
-After that set the password for the default user (passwd <username>), close and reopen the Alpine console.
+1) logging in with root (wsl.exe --distribution Alpine --user root),
+2) setting a root password (passwd),
+3) installing sudo (apk add sudo),
+4) un-commenting a line in the /etc/sudoers file to allow anyone use sudo who is in the sudo group (%sudo ALL=(ALL) ALL),
+5) create a sudo group (addgroup sudo) and
+6) add my default user to that group (usermod -aG sudo <username>).
+7) After that set the password for the default user (passwd <username>), close and reopen the Alpine console.
 
 
 
