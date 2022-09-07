@@ -1,3 +1,16 @@
+## https://jlelse.blog/dev/using-windows-3
+
+logging in with root (wsl.exe --distribution Alpine --user root),
+setting a root password (passwd),
+installing sudo (apk add sudo),
+un-commenting a line in the /etc/sudoers file to allow anyone use sudo who is in the sudo group (%sudo ALL=(ALL) ALL),
+create a sudo group (addgroup sudo) and
+add my default user to that group (usermod -aG sudo <username>).
+After that set the password for the default user (passwd <username>), close and reopen the Alpine console.
+
+
+
+
 # WSL Alpine DistroLauncher
 ## Introduction 
   This is the Alpine Launcher implementation for a Windows Subsystem for Linux (WSL) distribution.
